@@ -13,7 +13,7 @@
     "isolatedModules": true,
     "baseUrl": ".",
     "noFallthroughCasesInSwitch": true,
-    "noUnusedLocals": false,
+    "noUnusedLocals": true,
     "outDir": "./dist"
   },
   "compileOnSave": true,
