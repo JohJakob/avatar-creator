@@ -73,7 +73,7 @@ export const DEFAULT_AVATAR: Avatar = {
   },
   eyes: {
     type: EyesType.Eyes1,
-    color: EyesColor.Black,
+    color: EyesColor.Blue,
   },
   eyebrows: {
     type: EyebrowsType.Eyebrows1,
