@@ -1,0 +1,26 @@
+{
+  "name": "avatar-creator",
+  "version": "0.0.1",
+  "main": "main.js",
+  "repository": "https://github.com/JohJakob/avatar-creator.git",
+  "author": "Johannes Jakob <hi@johjakob.com>",
+  "license": "MIT",
+  "type": "module",
+  "scripts": {
+    "test": "jest",
+    "build": "tsc",
+    "start": "tsc -w"
+  },
+  "devDependencies": {
+    "@babel/core": "^7.23.3",
+    "@babel/preset-env": "^7.23.3",
+    "@babel/preset-typescript": "^7.23.3",
+    "@types/jest": "^29.5.8",
+    "babel-jest": "^29.7.0",
+    "jest": "^29.7.0",
+    "jest-cli": "^29.7.0",
+    "jest-environment-jsdom": "^29.7.0",
+    "ts-jest": "^29.1.1",
+    "typescript": "^5.4.5"
+  }
+}
