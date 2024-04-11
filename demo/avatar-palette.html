@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Palette</title>
+    <link rel="stylesheet" href="./demo.css" />
+  </head>
+  <body>
+    <main>
+      <div class="demo">
+        <h1>Avatar Palette</h1>
+        <p> Creates a palette to choose a color.</p>
+        <div class="demo-block">
+          <avatar-palette
+            paletteMode="color"
+            path="eyes"
+            items='["eyes-green","eyes-blue","eyes-brown"]'
+          ></avatar-palette>
+          </div>
+          <div class="demo-block">
+            <avatar-palette paletteMode="type" path="hair" items='["hair1","hair2"]'></avatar-palette>
+          </div>
+        </div>
+      </div>
+    </main>
+  </body>
+  <script type="module" src="./../dist/src/components/avatar-palette/avatar-palette.js"></script>
+</html>
