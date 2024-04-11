@@ -22,7 +22,7 @@ class SvgRenderer extends HTMLElement {
   }
 
   static get observedAttributes() {
-    return ['path', 'color', 'width', 'height'];
+    return ['path', 'color', 'width', 'height', 'stretch'];
   }
 
   public connectedCallback() {
@@ -38,8 +38,9 @@ class SvgRenderer extends HTMLElement {
   private render() {
     const path = this.getAttribute('path');
     const color = this.getAttribute('color');
-    const width = this.getAttribute('width') || `${DEFAULT_WIDTH}`;
-    const height = this.getAttribute('height') || `${DEFAULT_HEIGHT}`;
+    const stretch = !!this.getAttribute('stretch');
+    const width = stretch ? '100%' : (this.getAttribute('width') || `${DEFAULT_WIDTH}`) + 'px';
+    const height = stretch ? '100%' : (this.getAttribute('height') || `${DEFAULT_HEIGHT}`) + 'px';
 
     if (!path) {
       return;
@@ -87,8 +88,8 @@ class SvgRenderer extends HTMLElement {
     imageContainerElement.classList.add('svg-container');
 
     imageContainerElement.style.color = color;
-    imageContainerElement.style.height = height + 'px';
-    imageContainerElement.style.width = width + 'px';
+    imageContainerElement.style.height = height;
+    imageContainerElement.style.width = width;
 
     return imageContainerElement;
   }

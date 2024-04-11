@@ -43,3 +43,5 @@ export enum BackgroundType {
   Background1 = 'background1',
   Background2 = 'background2',
 }
+
+export type AvatarType = ClothesType | EyesType | EyebrowsType | MouthType | FaceType | HairType | BackgroundType;

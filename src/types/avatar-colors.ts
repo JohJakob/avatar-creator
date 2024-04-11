@@ -1,43 +1,51 @@
 export enum SkinColor {
-  Light = 'light',
-  Medium = 'medium',
-  Dark = 'dark',
+  Light = 'skin-light',
+  Medium = 'skin-medium',
+  Dark = 'skin-dark',
 }
 
 export enum HairColor {
-  Blond = 'blond',
-  Brown = 'brown',
-  Dark = 'dark',
-  Red = 'red',
-  Grey = 'grey',
+  Blond = 'hair-blond',
+  Brown = 'hair-brown',
+  Dark = 'hair-dark',
+  Red = 'hair-red',
+  Grey = 'hair-grey',
 }
 
 export enum EyesColor {
-  Black = 'black',
-  Brown = 'brown',
-  Blue = 'blue',
-  Green = 'green',
+  Brown = 'eyes-brown',
+  Blue = 'eyes-blue',
+  Green = 'eyes-green',
 }
 
 export enum MouthColor {
-  Pink = 'pink',
-  Coral = 'coral',
-  Red = 'red',
+  Pink = 'mouth-pink',
+  Coral = 'mouth-coral',
+  Red = 'mouth-red',
 }
 
 export enum ClothesColor {
-  Red = 'red',
-  Blue = 'blue',
-  Black = 'black',
-  White = 'white',
+  Red = 'clothes-red',
+  Blue = 'clothes-blue',
+  Black = 'clothes-black',
+  White = 'clothes-white',
 }
 
 export enum AccessoriesColor {
-  Gold = 'gold',
-  Silver = 'silver',
+  Gold = 'accessories-gold',
+  Silver = 'accessories-silver',
 }
 
 export enum BackgroundColor {
-  White = 'white',
-  Blue = 'blue',
+  White = 'background-white',
+  Blue = 'background-blue',
 }
+
+export type AvatarColor =
+  | SkinColor
+  | HairColor
+  | EyesColor
+  | MouthColor
+  | ClothesColor
+  | AccessoriesColor
+  | BackgroundColor;

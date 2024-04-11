@@ -6,8 +6,8 @@ import {
   HairColor,
   MouthColor,
   SkinColor,
-} from './avatar-colors';
-import { BackgroundExtra, EyesExtra, HairExtra } from './avatar-extras';
+} from './avatar-colors.js';
+import { BackgroundExtra, EyesExtra, HairExtra } from './avatar-extras.js';
 import {
   AccessoriesType,
   BackgroundType,
@@ -18,7 +18,7 @@ import {
   FacialHairType,
   HairType,
   MouthType,
-} from './avatar-types';
+} from './avatar-types.js';
 
 export interface Avatar {
   face: {
@@ -62,7 +62,7 @@ export interface Avatar {
   };
 }
 
-export const defaultAvatar: Avatar = {
+export const DEFAULT_AVATAR: Avatar = {
   face: {
     type: FaceType.Face1,
     color: SkinColor.Light,
@@ -82,10 +82,6 @@ export const defaultAvatar: Avatar = {
   mouth: {
     type: MouthType.Mouth1,
     color: MouthColor.Pink,
-  },
-  facialHair: {
-    type: FacialHairType.Beard,
-    color: HairColor.Blond,
   },
   clothes: {
     type: ClothesType.Tshirt,
