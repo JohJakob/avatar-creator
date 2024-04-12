@@ -13,47 +13,42 @@ template.innerHTML = `
       background-color: #fff;
       border: 1px solid #000;
       display: block;
-      height: 200px;
-      width: 200px;
+      height: 300px;
+      width: 300px;
       position: relative;
     }
 
     .avatar-part {
-      height: 180px;
-      width: 180px;
+      height: 256px;
+      width: 256px;
       left: 50%;
       margin: 0 auto;
       position: absolute;
+      top: 0;
       transform: translateX(-50%);      
     }
 
     .face {          
-      top: 10px;
       z-index: 1;
     }
 
     .eyes {
-      top: 10px;;
       z-index: 2;
     }
 
     .eyebrows {
-      top: 10px;;
       z-index: 3;
     }
 
     .nose {
-      top: 15px;;
       z-index: 4;
     }
 
     .mouth {
-      top: 15px;
       z-index: 5;
     }
 
     .hair {
-      top: 5px;;
       z-index: 6;
     }
   </style>
