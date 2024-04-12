@@ -1,17 +1,15 @@
 import { AvatarColor } from '../../types/avatar-colors.js';
 import { AvatarType } from '../../types/avatar-types.js';
-import { Avatar, AvatarPart } from '../../types/avatar.js';
+import { Avatar, AvatarPart, DEFAULT_AVATAR } from '../../types/avatar.js';
 import { colorsMap } from '../../types/colors-map.js';
-import { getValidAvatar } from '../../utils/get-valid-avatar.js';
-import './../svg-renderer/svg-renderer.js';
 
-const USE_RANDOM_AVATAR = true;
+import './../svg-renderer/svg-renderer.js';
 
 const template = document.createElement('template');
 
 template.innerHTML = `
   <style>
-    :host {
+    .avatar {
       background-color: #fff;
       border: 1px solid #000;
       display: block;
@@ -58,7 +56,9 @@ template.innerHTML = `
       top: 5px;;
       z-index: 6;
     }
-  </style>`;
+  </style>
+  <div class="avatar"></div>
+  `;
 
 export class AvatarRenderer extends HTMLElement {
   constructor() {
@@ -67,10 +67,22 @@ export class AvatarRenderer extends HTMLElement {
   }
 
   static get observedAttributes() {
-    return ['avatar', 'width', 'height'];
+    return ['avatar'];
   }
 
   public connectedCallback() {
+    const content = template.content.cloneNode(true) as HTMLElement;
+
+    const avatarElement = content.querySelector('.avatar');
+
+    for (const key in DEFAULT_AVATAR) {
+      const element = this.createAvatarPartElement(key);
+
+      avatarElement.appendChild(element);
+    }
+
+    this.shadowRoot?.appendChild(content);
+
     this.render();
   }
 
@@ -81,62 +93,40 @@ export class AvatarRenderer extends HTMLElement {
   }
 
   private render(): void {
-    const avatar = JSON.parse(this.getAttribute('avatar') || '{}');
-    const width = (this.getAttribute('width') || '100') + 'px';
-    const height = (this.getAttribute('height') || '100') + 'px';
+    const avatar = JSON.parse(this.getAttribute('avatar'));
 
-    const validAvatar = getValidAvatar(avatar, USE_RANDOM_AVATAR);
-    console.log(validAvatar);
-    const content = template.content.cloneNode(true);
+    if (!avatar) {
+      return;
+    }
 
-    const avatarContainerElement = this.getAvatarContainerElement(width, height);
+    const avatarElement = this.shadowRoot?.querySelector('.avatar');
 
-    for (const key in validAvatar) {
-      const avatarPart = validAvatar[key as keyof Avatar] as AvatarPart;
+    if (!avatarElement) {
+      return;
+    }
+
+    for (const partName in avatar) {
+      const avatarPart = avatar[partName as keyof Avatar] as AvatarPart;
 
       if (avatarPart) {
-        const element = this.getAvatarPartElement(key, avatarPart.type, avatarPart.color);
-        avatarContainerElement.appendChild(element);
+        const existingElement = avatarElement.querySelector(`.avatar-part.${partName}`);
+
+        if (existingElement) {
+          this.updateAvatarPartElement(existingElement, partName, avatarPart.type, avatarPart.color);
+
+          continue;
+        }
+
+        const newElement = this.createAvatarPartElement(partName);
+
+        this.updateAvatarPartElement(newElement, partName, avatarPart.type, avatarPart.color);
+
+        avatarElement.appendChild(newElement);
       }
     }
-
-    // const faceElement = this.getAvatarPartElement('face', validAvatar.face.type, validAvatar.face.color);
-    // avatarContainerElement.appendChild(faceElement);
-
-    // if (validAvatar.hair) {
-    //   const hairElement = this.getAvatarPartElement('hair', validAvatar.hair.type, validAvatar.hair.color);
-    //   avatarContainerElement.appendChild(hairElement);
-    // }
-
-    // const eyesElement = this.getAvatarPartElement('eyes', validAvatar.eyes.type, validAvatar.eyes.color);
-    // avatarContainerElement.appendChild(eyesElement);
-
-    // const noseElement = this.getAvatarPartElement('nose', validAvatar.nose.type);
-    // avatarContainerElement.appendChild(noseElement);
-
-    // const mouthElement = this.getAvatarPartElement('mouth', validAvatar.mouth.type, validAvatar.mouth.color);
-    // avatarContainerElement.appendChild(mouthElement);
-
-    content.appendChild(avatarContainerElement);
-
-    if (this.shadowRoot) {
-      this.shadowRoot.innerHTML = '';
-      this.shadowRoot.appendChild(content);
-    }
   }
 
-  private getAvatarContainerElement(width: string, height: string): HTMLDivElement {
-    const avatarContainerElement = document.createElement('div');
-
-    avatarContainerElement.classList.add('svg-container');
-
-    avatarContainerElement.style.height = height;
-    avatarContainerElement.style.width = width;
-
-    return avatarContainerElement;
-  }
-
-  private getAvatarPartElement(name: string, type: AvatarType, color?: AvatarColor): HTMLDivElement {
+  private createAvatarPartElement(name: string): HTMLDivElement {
     const avatarPartContainerElement = document.createElement('div');
 
     avatarPartContainerElement.classList.add('avatar-part');
@@ -144,16 +134,25 @@ export class AvatarRenderer extends HTMLElement {
 
     const avatarPartElement = document.createElement('svg-renderer');
 
-    avatarPartElement.setAttribute('path', `avatar/${name}/${type}.svg`);
     avatarPartElement.setAttribute('stretch', 'true');
-
-    if (color) {
-      avatarPartElement.setAttribute('color', colorsMap[color] || '#000000');
-    }
 
     avatarPartContainerElement.appendChild(avatarPartElement);
 
     return avatarPartContainerElement;
+  }
+
+  private updateAvatarPartElement(element: Element, partName: string, type: AvatarType, color?: AvatarColor): void {
+    const renderer = element.querySelector('svg-renderer');
+
+    if (!renderer) {
+      return;
+    }
+
+    renderer.setAttribute('path', `avatar/${partName}/${type}.svg`);
+
+    if (color) {
+      renderer.setAttribute('color', colorsMap[color] || '#000000');
+    }
   }
 }
 
