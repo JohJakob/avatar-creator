@@ -5,5 +5,7 @@ document.addEventListener('DOMContentLoaded', function () {
 
   const randomAvatar = createRandomAvatar();
 
-  rendererElement.avatar = randomAvatar;
+  rendererElement.setAttribute('avatar', JSON.stringify(randomAvatar));
+
+  console.log(randomAvatar);
 });
