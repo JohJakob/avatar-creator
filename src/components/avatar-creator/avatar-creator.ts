@@ -3,6 +3,7 @@ import { createRandomAvatar } from '../../utils/random.js';
 import './../avatar-renderer/avatar-renderer.js';
 import './../avatar-palette/avatar-palette.js';
 import { getValidAvatar } from '../../utils/get-valid-avatar.js';
+import { colorPaletteMap, typePaletteMap } from '../../types/palettes.js';
 
 const template = document.createElement('template');
 
@@ -31,6 +32,10 @@ template.innerHTML = `
       cursor: pointer;
       padding: 6px 16px;
     }
+
+    .hidden {
+      display: none;
+    }
   </style>
   <div class="avatar-creator">
     <avatar-renderer></avatar-renderer>
@@ -40,14 +45,15 @@ template.innerHTML = `
       <button class="avatar-control" id="avatar-control-skip">Skip</button>
     </div>
     <div class="avatar-palettes">
-      <avatar-palette id="type-palette" palette-mode="type"></avatar-palette>
-      <avatar-palette id="color-palette" palette-mode="color"></avatar-palette>
+      <avatar-palette id="type-palette" paletteMode="type"></avatar-palette>
+      <avatar-palette id="color-palette" paletteMode="color"></avatar-palette>
     </div>
   </div>
 `;
 
 class AvatarCreator extends HTMLElement {
   private avatar: Avatar;
+  private currentPartName: keyof Avatar;
 
   constructor() {
     super();
@@ -56,7 +62,8 @@ class AvatarCreator extends HTMLElement {
 
   public connectedCallback() {
     this.avatar = this.loadAvatar();
-    console.log(this.avatar);
+
+    this.currentPartName = 'face';
 
     const content = template.content.cloneNode(true);
 
@@ -80,6 +87,22 @@ class AvatarCreator extends HTMLElement {
       this.skip();
     });
 
+    const typePaletteElement = this.shadowRoot?.querySelector('#type-palette');
+
+    typePaletteElement.addEventListener('onSelect', (event: CustomEvent) => {
+      this.avatar[this.currentPartName] = { ...this.avatar[this.currentPartName], type: event.detail };
+
+      this.render();
+    });
+
+    const colorPaletteElement = this.shadowRoot?.querySelector('#color-palette');
+
+    colorPaletteElement.addEventListener('onSelect', (event: CustomEvent) => {
+      this.avatar[this.currentPartName] = { ...this.avatar[this.currentPartName], color: event.detail };
+
+      this.render();
+    });
+
     this.render();
   }
 
@@ -95,6 +118,18 @@ class AvatarCreator extends HTMLElement {
     const avatarElement = this.shadowRoot?.querySelector('avatar-renderer');
 
     avatarElement.setAttribute('avatar', JSON.stringify(this.avatar));
+
+    const typePaletteElement = this.shadowRoot?.querySelector('#type-palette');
+
+    const types = typePaletteMap.get(this.currentPartName);
+
+    this.renderPalette(typePaletteElement, types);
+
+    const colorPaletteElement = this.shadowRoot?.querySelector('#color-palette');
+
+    const colors = colorPaletteMap.get(this.currentPartName);
+
+    this.renderPalette(colorPaletteElement, colors);
   }
 
   private randomize(): void {
@@ -105,6 +140,18 @@ class AvatarCreator extends HTMLElement {
 
   private skip(): void {
     this.dispatchEvent(new CustomEvent('onSkip'));
+  }
+
+  private renderPalette(paletteElement: Element, items: string[]): void {
+    if (items) {
+      paletteElement.setAttribute('partName', this.currentPartName);
+      paletteElement.setAttribute('items', JSON.stringify(items));
+      paletteElement.classList.remove('hidden');
+    } else {
+      paletteElement.setAttribute('partName', null);
+      paletteElement.setAttribute('items', '[]');
+      paletteElement.classList.add('hidden');
+    }
   }
 }
 
