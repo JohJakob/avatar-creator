@@ -10,9 +10,11 @@ const template = document.createElement('template');
 template.innerHTML = `
   <style>
     .avatar-creator {
+      align-items: center;
       background-color: #fff;
       border: 1px solid #000;
-      display: block;
+      display: flex;      
+      flex-direction: column;
       padding: 40px;
       position: relative;
       width: fit-content;
@@ -171,9 +173,11 @@ class AvatarCreator extends HTMLElement {
 
   private renderPalette(paletteElement: Element, items: string[], paletteMode: 'color' | 'type'): void {
     if (items) {
+      const selectedItem = this.avatar[this.currentPartName][paletteMode];
+
       paletteElement.setAttribute('partName', this.currentPartName);
       paletteElement.setAttribute('items', JSON.stringify(items));
-      paletteElement.setAttribute('selectedItem', this.avatar[this.currentPartName][paletteMode]);
+      paletteElement.setAttribute('selectedItem', selectedItem);
       paletteElement.classList.remove('hidden');
     } else {
       paletteElement.setAttribute('partName', null);
