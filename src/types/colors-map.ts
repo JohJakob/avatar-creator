@@ -41,6 +41,11 @@ export const colorsMap: { [key in AvatarColor]: string } = {
   
   [AccessoriesColor.Gold]: '#FFD700',
   [AccessoriesColor.Silver]: '#C0C0C0',
-  [BackgroundColor.White]: '#FFFFFF',
-  [BackgroundColor.Blue]: '#0000FF',
+
+  [BackgroundColor.Sky]: '#CCE4FF',
+  [BackgroundColor.Rose]: '#FFDCDC',
+  [BackgroundColor.Mint]: '#CFF2E6',
+  [BackgroundColor.Lemon]: '#FFF5CC',
+  [BackgroundColor.Purple]: '#E2DFFB',
+  [BackgroundColor.Sand]: '#EBE1D3'
 };
