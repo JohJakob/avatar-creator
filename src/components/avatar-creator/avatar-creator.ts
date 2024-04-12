@@ -33,6 +33,21 @@ template.innerHTML = `
       padding: 6px 16px;
     }
 
+    .avatar-parts {
+      display: flex;
+      gap: 6px;
+      justify-content: center;
+      margin-top: 20px;
+    }
+
+    .avatar-parts .avatar-part-button {
+      background: white;
+      border: 1px solid black;
+      border-radius: 6px;
+      cursor: pointer;
+      padding: 6px 16px;
+    }    
+
     .hidden {
       display: none;
     }
@@ -44,6 +59,7 @@ template.innerHTML = `
       <button class="avatar-control" id="avatar-control-save">Save</button>
       <button class="avatar-control" id="avatar-control-skip">Skip</button>
     </div>
+    <div class="avatar-parts"></div>
     <div class="avatar-palettes">
       <avatar-palette id="type-palette" paletteMode="type"></avatar-palette>
       <avatar-palette id="color-palette" paletteMode="color"></avatar-palette>
@@ -103,6 +119,12 @@ class AvatarCreator extends HTMLElement {
       this.render();
     });
 
+    const avatarPartButtonsElement = this.shadowRoot?.querySelector('.avatar-parts');
+
+    for (const type of Object.values([...typePaletteMap]).map(arr => arr[0])) {
+      avatarPartButtonsElement.appendChild(this.createAvatarPartButton(type));
+    }
+
     this.render();
   }
 
@@ -123,13 +145,13 @@ class AvatarCreator extends HTMLElement {
 
     const types = typePaletteMap.get(this.currentPartName);
 
-    this.renderPalette(typePaletteElement, types);
+    this.renderPalette(typePaletteElement, types, 'type');
 
     const colorPaletteElement = this.shadowRoot?.querySelector('#color-palette');
 
     const colors = colorPaletteMap.get(this.currentPartName);
 
-    this.renderPalette(colorPaletteElement, colors);
+    this.renderPalette(colorPaletteElement, colors, 'color');
   }
 
   private randomize(): void {
@@ -142,16 +164,33 @@ class AvatarCreator extends HTMLElement {
     this.dispatchEvent(new CustomEvent('onSkip'));
   }
 
-  private renderPalette(paletteElement: Element, items: string[]): void {
+  private renderPalette(paletteElement: Element, items: string[], paletteMode: 'color' | 'type'): void {
     if (items) {
       paletteElement.setAttribute('partName', this.currentPartName);
       paletteElement.setAttribute('items', JSON.stringify(items));
+      paletteElement.setAttribute('selectedItem', this.avatar[this.currentPartName][paletteMode]);
       paletteElement.classList.remove('hidden');
     } else {
       paletteElement.setAttribute('partName', null);
       paletteElement.setAttribute('items', '[]');
       paletteElement.classList.add('hidden');
     }
+  }
+
+  private createAvatarPartButton(partName: string): HTMLButtonElement {
+    const buttonElement = document.createElement('button');
+
+    buttonElement.classList.add('avatar-part-button');
+
+    buttonElement.textContent = partName;
+
+    buttonElement.addEventListener('click', () => {
+      this.currentPartName = partName as keyof Avatar;
+
+      this.render();
+    });
+
+    return buttonElement;
   }
 }
 
