@@ -5,6 +5,7 @@ export enum FaceType {
 export enum HairType {
   Hair1 = 'hair_01',
   Hair2 = 'hair_02',
+  Hair3 = 'hair_03',
 }
 
 export enum HairAccessoriesType {
