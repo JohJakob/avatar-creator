@@ -67,16 +67,15 @@ const getValidAvatarPart = (
   noColor?: boolean
 ): { type: keyof typeof types; color: keyof typeof colors } => {
   if (!avatar[partName]) {
-    // TODO: restore later
-    // if (optional) {
-    //   return;
-    // }
+    if (optional) {
+      return;
+    }
 
     return defaultAvatar[partName];
   }
 
   const defaultType = defaultAvatar[partName]?.type ?? getDefaultEnumValue(types);
-  const defaultColor = noColor ? defaultAvatar[partName]?.color ?? getDefaultEnumValue(colors) : null;
+  const defaultColor = noColor ? null : defaultAvatar[partName]?.color ?? getDefaultEnumValue(colors);
 
   return {
     type: isEnumValue(types, avatar[partName]?.type) ? avatar[partName].type : defaultType,
