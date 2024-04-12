@@ -7,15 +7,16 @@ import {
   MouthColor,
   SkinColor,
 } from './avatar-colors.js';
-import { BackgroundExtra, EyesExtra, HairExtra } from './avatar-extras.js';
 import {
   AccessoriesType,
   BackgroundType,
   ClothesType,
   EyebrowsType,
+  EyesAccessoriesType,
   EyesType,
   FaceType,
   FacialHairType,
+  HairAccessoriesType,
   HairType,
   MouthType,
 } from './avatar-types.js';
@@ -28,12 +29,18 @@ export interface Avatar {
   hair?: {
     type: HairType;
     color: HairColor;
-    extra?: HairExtra;
+  };
+  hair_accessories?: {
+    type: HairAccessoriesType;
+    color: ClothesColor;
   };
   eyes: {
     type: EyesType;
     color: EyesColor;
-    extra?: EyesExtra;
+  };
+  eyes_accessories?: {
+    type: EyesAccessoriesType;
+    color: AccessoriesColor;
   };
   eyebrows: {
     type: EyebrowsType;
@@ -58,7 +65,6 @@ export interface Avatar {
   background: {
     type: BackgroundType;
     color: BackgroundColor;
-    extra?: BackgroundExtra;
   };
 }
 
@@ -90,6 +96,5 @@ export const DEFAULT_AVATAR: Avatar = {
   background: {
     type: BackgroundType.Background1,
     color: BackgroundColor.White,
-    extra: BackgroundExtra.Logo,
   },
 };

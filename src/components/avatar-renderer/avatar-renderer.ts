@@ -88,7 +88,7 @@ export class AvatarRenderer extends HTMLElement {
     const height = (this.getAttribute('height') || '100') + 'px';
 
     const validAvatar = getValidAvatar(avatar, USE_RANDOM_AVATAR);
-
+);
     const content = template.content.cloneNode(true);
 
     const avatarContainerElement = this.getAvatarContainerElement(width, height);

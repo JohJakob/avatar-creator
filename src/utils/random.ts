@@ -7,15 +7,16 @@ import {
   MouthColor,
   SkinColor,
 } from '../types/avatar-colors.js';
-import { BackgroundExtra, EyesExtra, HairExtra } from '../types/avatar-extras.js';
 import {
   AccessoriesType,
   BackgroundType,
   ClothesType,
   EyebrowsType,
+  EyesAccessoriesType,
   EyesType,
   FaceType,
   FacialHairType,
+  HairAccessoriesType,
   HairType,
   MouthType,
 } from '../types/avatar-types.js';
@@ -37,50 +38,31 @@ export const getRandomEnumValue = <T>(enumType: T, optional?: boolean): T[keyof 
 
 export const createRandomAvatar = (): Avatar => {
   return {
-    face: {
-      type: getRandomEnumValue(FaceType),
-      color: getRandomEnumValue(SkinColor),
-    },
-    ...(getRandomNumber(1) && {
-      hair: {
-        type: getRandomEnumValue(HairType),
-        color: getRandomEnumValue(HairColor),
-        extra: getRandomEnumValue(HairExtra, true),
-      },
-    }),
-    eyes: {
-      type: getRandomEnumValue(EyesType),
-      color: getRandomEnumValue(EyesColor),
-      extra: getRandomEnumValue(EyesExtra, true),
-    },
-    eyebrows: {
-      type: getRandomEnumValue(EyebrowsType),
-      color: getRandomEnumValue(HairColor),
-    },
-    mouth: {
-      type: getRandomEnumValue(MouthType),
-      color: getRandomEnumValue(MouthColor),
-    },
-    ...(getRandomNumber(1) && {
-      facialHair: {
-        type: getRandomEnumValue(FacialHairType),
-        color: getRandomEnumValue(HairColor),
-      },
-    }),
-    clothes: {
-      type: getRandomEnumValue(ClothesType),
-      color: getRandomEnumValue(ClothesColor),
-    },
-    ...(getRandomNumber(1) && {
-      accessories: {
-        type: getRandomEnumValue(AccessoriesType),
-        color: getRandomEnumValue(AccessoriesColor),
-      },
-    }),
-    background: {
-      type: getRandomEnumValue(BackgroundType),
-      color: getRandomEnumValue(BackgroundColor),
-      extra: getRandomEnumValue(BackgroundExtra, true),
-    },
+    face: createRandomAvatarPart(FaceType, SkinColor),
+    hair: createRandomAvatarPart(HairType, HairColor, true),
+    hair_accessories: createRandomAvatarPart(HairAccessoriesType, ClothesColor, true),
+    eyes: createRandomAvatarPart(EyesType, EyesColor),
+    eyes_accessories: createRandomAvatarPart(EyesAccessoriesType, AccessoriesColor, true),
+    eyebrows: createRandomAvatarPart(EyebrowsType, HairColor),
+    mouth: createRandomAvatarPart(MouthType, MouthColor),
+    facialHair: createRandomAvatarPart(FacialHairType, HairColor, true),
+    clothes: createRandomAvatarPart(ClothesType, ClothesColor),
+    accessories: createRandomAvatarPart(AccessoriesType, AccessoriesColor, true),
+    background: createRandomAvatarPart(BackgroundType, BackgroundColor),
+  } as Avatar;
+};
+
+export const createRandomAvatarPart = (
+  types: { [key: string]: string },
+  colors: { [key: string]: string },
+  optional?: boolean
+) => {
+  if (optional && !getRandomNumber(1)) {
+    return;
+  }
+
+  return {
+    type: getRandomEnumValue(types),
+    color: getRandomEnumValue(colors),
   };
 };

@@ -8,9 +8,20 @@ export enum HairType {
   Hair2 = 'hair2',
 }
 
+export enum HairAccessoriesType {
+  Ribbon = 'ribbon',
+  Hat = 'hat',
+  Cap = 'cap',
+}
+
 export enum EyesType {
   Eyes1 = 'eyes1',
   Eyes2 = 'eyes2',
+}
+
+export enum EyesAccessoriesType {
+  Glasses = 'glasses',
+  Sunglasses = 'sunglasses',
 }
 
 export enum EyebrowsType {
@@ -40,8 +51,19 @@ export enum AccessoriesType {
 }
 
 export enum BackgroundType {
-  Background1 = 'background1',
-  Background2 = 'background2',
+  Background1 = 'plain',
+  Background2 = 'with-logo',
 }
 
-export type AvatarType = ClothesType | EyesType | EyebrowsType | MouthType | FaceType | HairType | BackgroundType;
+export type AvatarType =
+  | FaceType
+  | HairType
+  | HairAccessoriesType
+  | EyesType
+  | EyesAccessoriesType
+  | EyebrowsType
+  | MouthType
+  | FacialHairType
+  | ClothesType
+  | AccessoriesType
+  | BackgroundType;

@@ -1,5 +1,6 @@
 import {
   AccessoriesColor,
+  AvatarColor,
   BackgroundColor,
   ClothesColor,
   EyesColor,
@@ -7,20 +8,22 @@ import {
   MouthColor,
   SkinColor,
 } from '../types/avatar-colors.js';
-import { BackgroundExtra, EyesExtra, HairExtra } from '../types/avatar-extras.js';
 import {
   AccessoriesType,
+  AvatarType,
   BackgroundType,
   ClothesType,
   EyebrowsType,
+  EyesAccessoriesType,
   EyesType,
   FaceType,
   FacialHairType,
+  HairAccessoriesType,
   HairType,
   MouthType,
 } from '../types/avatar-types.js';
 import { Avatar, DEFAULT_AVATAR } from '../types/avatar.js';
-import { isEnumValue } from './is-enum-value.js';
+import { getDefaultEnumValue, isEnumValue } from './enum.js';
 import { createRandomAvatar } from './random.js';
 
 export const getValidAvatar = (avatar: Avatar, random?: boolean): Avatar => {
@@ -31,83 +34,49 @@ export const getValidAvatar = (avatar: Avatar, random?: boolean): Avatar => {
   }
 
   return {
-    face: {
-      type: isEnumValue(FaceType, avatar.face?.type) ? avatar.face?.type : defaultAvatar.face.type,
-      color: isEnumValue(SkinColor, avatar.face?.color) ? avatar.face?.color : defaultAvatar.face.color,
-    },
+    face: getValidAvatarPart(avatar, defaultAvatar, 'face', FaceType, SkinColor),
+    hair: getValidAvatarPart(avatar, defaultAvatar, 'hair', HairType, HairColor, true),
+    hair_accessories: getValidAvatarPart(avatar, defaultAvatar, 'hair_accessories', HairAccessoriesType, ClothesColor),
+    eyes: getValidAvatarPart(avatar, defaultAvatar, 'eyes', EyesType, EyesColor),
+    eyes_accessories: getValidAvatarPart(
+      avatar,
+      defaultAvatar,
+      'eyes_accessories',
+      EyesAccessoriesType,
+      AccessoriesColor,
+      true
+    ),
+    eyebrows: getValidAvatarPart(avatar, defaultAvatar, 'eyebrows', EyebrowsType, HairColor),
+    mouth: getValidAvatarPart(avatar, defaultAvatar, 'mouth', MouthType, MouthColor),
+    facialHair: getValidAvatarPart(avatar, defaultAvatar, 'facialHair', FacialHairType, MouthColor, true),
+    clothes: getValidAvatarPart(avatar, defaultAvatar, 'clothes', ClothesType, ClothesColor),
+    accessories: getValidAvatarPart(avatar, defaultAvatar, 'accessories', AccessoriesType, AccessoriesColor, true),
+    background: getValidAvatarPart(avatar, defaultAvatar, 'background', BackgroundType, BackgroundColor),
+  } as Avatar;
+};
 
-    ...((avatar.hair || random) && {
-      hair: {
-        type:
-          avatar.hair && isEnumValue(HairType, avatar.hair?.type)
-            ? avatar.hair.type
-            : defaultAvatar.hair?.type ?? HairType.Hair1,
-        color:
-          avatar.hair && isEnumValue(HairColor, avatar.hair.color)
-            ? avatar.hair?.color
-            : defaultAvatar.hair?.color ?? HairColor.Blond,
-        extra:
-          avatar.hair?.extra && isEnumValue(HairExtra, avatar.hair.extra)
-            ? avatar.hair?.extra
-            : defaultAvatar.hair?.extra,
-      },
-    }),
+const getValidAvatarPart = (
+  avatar: Avatar,
+  defaultAvatar: Avatar,
+  partName: keyof Avatar,
+  types: { [key: string]: string },
+  colors: { [key: string]: string },
+  optional?: boolean
+): { type: keyof typeof types; color: keyof typeof colors } => {
+  if (!avatar[partName]) {
+    // TODO: restore later
+    // if (optional) {
+    //   return;
+    // }
 
-    eyes: {
-      type: isEnumValue(EyesType, avatar.eyes?.type) ? avatar.eyes.type : defaultAvatar.eyes?.type,
-      color: isEnumValue(EyesColor, avatar.eyes?.color) ? avatar.eyes.color : defaultAvatar.eyes?.color,
-      extra:
-        avatar.eyes?.extra && isEnumValue(EyesExtra, avatar.eyes.extra) ? avatar.eyes.extra : defaultAvatar.eyes?.extra,
-    },
+    return defaultAvatar[partName];
+  }
 
-    eyebrows: {
-      type: isEnumValue(EyebrowsType, avatar.eyebrows?.type) ? avatar.eyebrows.type : defaultAvatar.eyebrows?.type,
-      color: isEnumValue(HairColor, avatar.eyebrows?.color) ? avatar.eyebrows.color : defaultAvatar.eyebrows?.color,
-    },
+  const defaultType = defaultAvatar[partName]?.type ?? getDefaultEnumValue(types);
+  const defaultColor = defaultAvatar[partName]?.color ?? getDefaultEnumValue(colors);
 
-    mouth: {
-      type: isEnumValue(MouthType, avatar.mouth?.type) ? avatar.mouth.type : defaultAvatar.mouth?.type,
-      color: isEnumValue(MouthColor, avatar.mouth?.color) ? avatar.mouth.color : defaultAvatar.mouth?.color,
-    },
-
-    ...(avatar.facialHair && {
-      facialHair: {
-        type: isEnumValue(FacialHairType, avatar.facialHair.type)
-          ? avatar.facialHair.type
-          : defaultAvatar.facialHair?.type ?? FacialHairType.Beard,
-        color: isEnumValue(HairColor, avatar.facialHair.color)
-          ? avatar.facialHair.color
-          : defaultAvatar.facialHair?.color ?? HairColor.Blond,
-      },
-    }),
-
-    clothes: {
-      type: isEnumValue(ClothesType, avatar.clothes?.type) ? avatar.clothes.type : defaultAvatar.clothes?.type,
-      color: isEnumValue(ClothesColor, avatar.clothes?.color) ? avatar.clothes.color : defaultAvatar.clothes?.color,
-    },
-
-    ...(avatar.accessories && {
-      accessories: {
-        type: isEnumValue(AccessoriesType, avatar.accessories.type)
-          ? avatar.accessories.type
-          : defaultAvatar.accessories?.type ?? AccessoriesType.Beads,
-        color: isEnumValue(AccessoriesColor, avatar.accessories.color)
-          ? avatar.accessories.color
-          : defaultAvatar.accessories?.color ?? AccessoriesColor.Gold,
-      },
-    }),
-
-    background: {
-      type: isEnumValue(BackgroundType, avatar.background?.type)
-        ? avatar.background.type
-        : defaultAvatar.background?.type,
-      color: isEnumValue(BackgroundColor, avatar.background?.color)
-        ? avatar.background.color
-        : defaultAvatar.background?.color,
-      extra:
-        avatar.background?.extra && isEnumValue(BackgroundExtra, avatar.background.extra)
-          ? avatar.background.extra
-          : defaultAvatar.background?.extra,
-    },
+  return {
+    type: isEnumValue(types, avatar[partName]?.type) ? avatar[partName].type : defaultType,
+    color: isEnumValue(colors, avatar[partName]?.color) ? avatar[partName].color : defaultColor,
   };
 };
