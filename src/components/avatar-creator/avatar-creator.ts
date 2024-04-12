@@ -42,11 +42,15 @@ template.innerHTML = `
 
     .avatar-parts .avatar-part-button {
       background: white;
-      border: 1px solid black;
+      border: 2px solid black;
       border-radius: 6px;
       cursor: pointer;
       padding: 6px 16px;
     }    
+
+    .avatar-parts .avatar-part-button.selected {
+      border-color: #ff6600;
+    }
 
     .hidden {
       display: none;
@@ -78,6 +82,7 @@ class AvatarCreator extends HTMLElement {
 
   public connectedCallback() {
     this.avatar = this.loadAvatar();
+    console.log(this.avatar);
 
     this.currentPartName = 'face';
 
@@ -184,8 +189,24 @@ class AvatarCreator extends HTMLElement {
 
     buttonElement.textContent = partName;
 
+    if (this.currentPartName === partName) {
+      buttonElement.classList.add('selected');
+    }
+
     buttonElement.addEventListener('click', () => {
       this.currentPartName = partName as keyof Avatar;
+
+      const avatarPartButtonsElement = this.shadowRoot?.querySelector('.avatar-parts');
+
+      const buttons = avatarPartButtonsElement.querySelectorAll('.avatar-part-button');
+
+      for (const button of buttons) {
+        if (button === buttonElement) {
+          button.classList.add('selected');
+        } else {
+          button.classList.remove('selected');
+        }
+      }
 
       this.render();
     });
