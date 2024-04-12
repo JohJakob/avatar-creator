@@ -1,5 +1,6 @@
 import {
   AccessoriesColor,
+  AvatarColor,
   BackgroundColor,
   ClothesColor,
   EyesColor,
@@ -9,6 +10,7 @@ import {
 } from './avatar-colors.js';
 import {
   AccessoriesType,
+  AvatarType,
   BackgroundType,
   ClothesType,
   EyebrowsType,
@@ -19,7 +21,13 @@ import {
   HairAccessoriesType,
   HairType,
   MouthType,
+  NoseType,
 } from './avatar-types.js';
+
+export interface AvatarPart {
+  type: AvatarType;
+  color: AvatarColor;
+}
 
 export interface Avatar {
   face: {
@@ -45,6 +53,9 @@ export interface Avatar {
   eyebrows: {
     type: EyebrowsType;
     color: HairColor;
+  };
+  nose: {
+    type: NoseType;
   };
   mouth: {
     type: MouthType;
@@ -78,19 +89,22 @@ export const DEFAULT_AVATAR: Avatar = {
     color: HairColor.Blond,
   },
   eyes: {
-    type: EyesType.Eyes1,
+    type: EyesType.EyesRound,
     color: EyesColor.Blue,
   },
   eyebrows: {
     type: EyebrowsType.Eyebrows1,
     color: HairColor.Blond,
   },
+  nose: {
+    type: NoseType.Nose1,
+  },
   mouth: {
-    type: MouthType.Mouth1,
+    type: MouthType.MouthSmilingOpened,
     color: MouthColor.Pink,
   },
   clothes: {
-    type: ClothesType.Tshirt,
+    type: ClothesType.Body1,
     color: ClothesColor.Red,
   },
   background: {

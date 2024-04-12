@@ -1,5 +1,6 @@
 import { AvatarColor } from '../../types/avatar-colors.js';
 import { AvatarType } from '../../types/avatar-types.js';
+import { Avatar, AvatarPart } from '../../types/avatar.js';
 import { colorsMap } from '../../types/colors-map.js';
 import { getValidAvatar } from '../../utils/get-valid-avatar.js';
 import './../svg-renderer/svg-renderer.js';
@@ -19,46 +20,43 @@ template.innerHTML = `
       position: relative;
     }
 
-    .face {
-      height: 120px;
+    .avatar-part {
+      height: 180px;
+      width: 180px;
       left: 50%;
       margin: 0 auto;
       position: absolute;
-      top: 30px;
-      transform: translateX(-50%);
-      width: 120px;
+      transform: translateX(-50%);      
+    }
+
+    .face {          
+      top: 10px;
       z-index: 1;
     }
 
-    .hair {
-      height: 200px;
-      left: 50%;
-      margin: 0 auto;
-      position: absolute;
-      top: 5px;;
-      transform: translateX(-50%);
-      width: 180px;
-      z-index: 4;
-    }
-
     .eyes {
-      left: 50%;
-      margin: 0 auto;
-      position: absolute;
-      top: 15px;;
-      transform: translateX(-50%);
-      width: 55px;
+      top: 10px;;
       z-index: 2;
     }
 
-    .mouth {
-      left: 50%;
-      margin: 0 auto;
-      position: absolute;
-      top: 52px;;
-      transform: translateX(-50%);
-      width: 30px;
+    .eyebrows {
+      top: 10px;;
       z-index: 3;
+    }
+
+    .nose {
+      top: 15px;;
+      z-index: 4;
+    }
+
+    .mouth {
+      top: 15px;
+      z-index: 5;
+    }
+
+    .hair {
+      top: 5px;;
+      z-index: 6;
     }
   </style>`;
 
@@ -88,24 +86,36 @@ export class AvatarRenderer extends HTMLElement {
     const height = (this.getAttribute('height') || '100') + 'px';
 
     const validAvatar = getValidAvatar(avatar, USE_RANDOM_AVATAR);
-);
+    console.log(validAvatar);
     const content = template.content.cloneNode(true);
 
     const avatarContainerElement = this.getAvatarContainerElement(width, height);
 
-    const faceElement = this.getAvatarPartElement('face', validAvatar.face.type, validAvatar.face.color);
-    avatarContainerElement.appendChild(faceElement);
+    for (const key in validAvatar) {
+      const avatarPart = validAvatar[key as keyof Avatar] as AvatarPart;
 
-    if (validAvatar.hair) {
-      const hairElement = this.getAvatarPartElement('hair', validAvatar.hair.type, validAvatar.hair.color);
-      avatarContainerElement.appendChild(hairElement);
+      if (avatarPart) {
+        const element = this.getAvatarPartElement(key, avatarPart.type, avatarPart.color);
+        avatarContainerElement.appendChild(element);
+      }
     }
 
-    const eyesElement = this.getAvatarPartElement('eyes', validAvatar.eyes.type, validAvatar.eyes.color);
-    avatarContainerElement.appendChild(eyesElement);
+    // const faceElement = this.getAvatarPartElement('face', validAvatar.face.type, validAvatar.face.color);
+    // avatarContainerElement.appendChild(faceElement);
 
-    const mouthElement = this.getAvatarPartElement('mouth', validAvatar.mouth.type, validAvatar.mouth.color);
-    avatarContainerElement.appendChild(mouthElement);
+    // if (validAvatar.hair) {
+    //   const hairElement = this.getAvatarPartElement('hair', validAvatar.hair.type, validAvatar.hair.color);
+    //   avatarContainerElement.appendChild(hairElement);
+    // }
+
+    // const eyesElement = this.getAvatarPartElement('eyes', validAvatar.eyes.type, validAvatar.eyes.color);
+    // avatarContainerElement.appendChild(eyesElement);
+
+    // const noseElement = this.getAvatarPartElement('nose', validAvatar.nose.type);
+    // avatarContainerElement.appendChild(noseElement);
+
+    // const mouthElement = this.getAvatarPartElement('mouth', validAvatar.mouth.type, validAvatar.mouth.color);
+    // avatarContainerElement.appendChild(mouthElement);
 
     content.appendChild(avatarContainerElement);
 
@@ -126,16 +136,20 @@ export class AvatarRenderer extends HTMLElement {
     return avatarContainerElement;
   }
 
-  private getAvatarPartElement(name: string, type: AvatarType, color: AvatarColor): HTMLDivElement {
+  private getAvatarPartElement(name: string, type: AvatarType, color?: AvatarColor): HTMLDivElement {
     const avatarPartContainerElement = document.createElement('div');
 
+    avatarPartContainerElement.classList.add('avatar-part');
     avatarPartContainerElement.classList.add(name);
 
     const avatarPartElement = document.createElement('svg-renderer');
 
     avatarPartElement.setAttribute('path', `avatar/${name}/${type}.svg`);
-    avatarPartElement.setAttribute('color', colorsMap[color] || '#000000');
     avatarPartElement.setAttribute('stretch', 'true');
+
+    if (color) {
+      avatarPartElement.setAttribute('color', colorsMap[color] || '#000000');
+    }
 
     avatarPartContainerElement.appendChild(avatarPartElement);
 

@@ -21,6 +21,7 @@ import {
   HairAccessoriesType,
   HairType,
   MouthType,
+  NoseType,
 } from '../types/avatar-types.js';
 import { Avatar, DEFAULT_AVATAR } from '../types/avatar.js';
 import { getDefaultEnumValue, isEnumValue } from './enum.js';
@@ -47,6 +48,7 @@ export const getValidAvatar = (avatar: Avatar, random?: boolean): Avatar => {
       true
     ),
     eyebrows: getValidAvatarPart(avatar, defaultAvatar, 'eyebrows', EyebrowsType, HairColor),
+    nose: getValidAvatarPart(avatar, defaultAvatar, 'nose', NoseType, null, false, true),
     mouth: getValidAvatarPart(avatar, defaultAvatar, 'mouth', MouthType, MouthColor),
     facialHair: getValidAvatarPart(avatar, defaultAvatar, 'facialHair', FacialHairType, MouthColor, true),
     clothes: getValidAvatarPart(avatar, defaultAvatar, 'clothes', ClothesType, ClothesColor),
@@ -60,8 +62,9 @@ const getValidAvatarPart = (
   defaultAvatar: Avatar,
   partName: keyof Avatar,
   types: { [key: string]: string },
-  colors: { [key: string]: string },
-  optional?: boolean
+  colors?: { [key: string]: string },
+  optional?: boolean,
+  noColor?: boolean
 ): { type: keyof typeof types; color: keyof typeof colors } => {
   if (!avatar[partName]) {
     // TODO: restore later
@@ -73,10 +76,10 @@ const getValidAvatarPart = (
   }
 
   const defaultType = defaultAvatar[partName]?.type ?? getDefaultEnumValue(types);
-  const defaultColor = defaultAvatar[partName]?.color ?? getDefaultEnumValue(colors);
+  const defaultColor = noColor ? defaultAvatar[partName]?.color ?? getDefaultEnumValue(colors) : null;
 
   return {
     type: isEnumValue(types, avatar[partName]?.type) ? avatar[partName].type : defaultType,
-    color: isEnumValue(colors, avatar[partName]?.color) ? avatar[partName].color : defaultColor,
+    ...(!noColor && { color: isEnumValue(colors, avatar[partName]?.color) ? avatar[partName].color : defaultColor }),
   };
 };

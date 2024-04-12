@@ -1,11 +1,10 @@
 export enum FaceType {
-  Face1 = 'face1',
-  Face2 = 'face2',
+  Face1 = 'face_01',
 }
 
 export enum HairType {
-  Hair1 = 'hair1',
-  Hair2 = 'hair2',
+  Hair1 = 'hair_01',
+  Hair2 = 'hair_02',
 }
 
 export enum HairAccessoriesType {
@@ -15,8 +14,9 @@ export enum HairAccessoriesType {
 }
 
 export enum EyesType {
-  Eyes1 = 'eyes1',
-  Eyes2 = 'eyes2',
+  EyesRound = 'eyes_round',
+  EyesSmiling = 'eyes_smiling',
+  EyesWide = 'eyes_wide',
 }
 
 export enum EyesAccessoriesType {
@@ -25,13 +25,17 @@ export enum EyesAccessoriesType {
 }
 
 export enum EyebrowsType {
-  Eyebrows1 = 'eyebrows1',
-  Eyebrows2 = 'eyebrows2',
+  Eyebrows1 = 'eyebrows_01',
+}
+
+export enum NoseType {
+  Nose1 = 'nose',
 }
 
 export enum MouthType {
-  Mouth1 = 'mouth1',
-  Mouth2 = 'mouth2',
+  MouthSmilingOpened = 'mouth_smiling_opened',
+  MouthSmilingRight = 'mouth_smiling_right',
+  MouthSmirk = 'mouth_smirk',
 }
 
 export enum FacialHairType {
@@ -40,9 +44,7 @@ export enum FacialHairType {
 }
 
 export enum ClothesType {
-  Shirt = 'shirt',
-  Tshirt = 'tshirt',
-  Sweater = 'sweater',
+  Body1 = 'body_01',
 }
 
 export enum AccessoriesType {
@@ -62,6 +64,7 @@ export type AvatarType =
   | EyesType
   | EyesAccessoriesType
   | EyebrowsType
+  | NoseType
   | MouthType
   | FacialHairType
   | ClothesType

@@ -19,6 +19,7 @@ import {
   HairAccessoriesType,
   HairType,
   MouthType,
+  NoseType,
 } from '../types/avatar-types.js';
 import { Avatar } from '../types/avatar.js';
 
@@ -44,6 +45,7 @@ export const createRandomAvatar = (): Avatar => {
     eyes: createRandomAvatarPart(EyesType, EyesColor),
     eyes_accessories: createRandomAvatarPart(EyesAccessoriesType, AccessoriesColor, true),
     eyebrows: createRandomAvatarPart(EyebrowsType, HairColor),
+    nose: createRandomAvatarPart(NoseType, null, false, true),
     mouth: createRandomAvatarPart(MouthType, MouthColor),
     facialHair: createRandomAvatarPart(FacialHairType, HairColor, true),
     clothes: createRandomAvatarPart(ClothesType, ClothesColor),
@@ -54,15 +56,16 @@ export const createRandomAvatar = (): Avatar => {
 
 export const createRandomAvatarPart = (
   types: { [key: string]: string },
-  colors: { [key: string]: string },
-  optional?: boolean
+  colors?: { [key: string]: string },
+  optional?: boolean,
+  noColor?: boolean
 ) => {
-  if (optional && !getRandomNumber(1)) {
+  if (optional && !getRandomNumber(Object.keys(types).length)) {
     return;
   }
 
   return {
     type: getRandomEnumValue(types),
-    color: getRandomEnumValue(colors),
+    ...(!noColor && { color: getRandomEnumValue(colors) }),
   };
 };

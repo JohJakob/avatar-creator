@@ -4,7 +4,7 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Avatar Renderer</title>
-    <link rel="stylesheet" href="./demo.css" />
+    <link rel="stylesheet" href="./../demo.css" />
   </head>
   <body>
     <main>
@@ -16,10 +16,11 @@
         </p>
         <p>(reload to generate new avatar)</p>
         <div class="demo-block">
-          <avatar-renderer height="250" width="250"></avatar-renderer>
+          <avatar-renderer id="renderer" height="250" width="250"></avatar-renderer>
         </div>
       </div>
     </main>
   </body>
-  <script type="module" src="./../dist/src/components/avatar-renderer/avatar-renderer.js"></script>
+  <script type="module" src="./avatar-renderer.js"></script>
+  <script type="module" src="./../../dist/src/components/avatar-renderer/avatar-renderer.js"></script>
 </html>
