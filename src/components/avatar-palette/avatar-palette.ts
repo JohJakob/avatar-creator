@@ -39,7 +39,7 @@ template.innerHTML = `
 
 class AvatarPalette extends HTMLElement {
   private selectedItem: string;
-  private path: keyof Avatar;
+  private partName: keyof Avatar;
 
   constructor() {
     super();
@@ -47,7 +47,7 @@ class AvatarPalette extends HTMLElement {
   }
 
   static get observedAttributes() {
-    return ['items', 'selectedItem', 'paletteMode', 'path'];
+    return ['items', 'selectedItem', 'paletteMode', 'partName'];
   }
 
   public connectedCallback() {
@@ -62,10 +62,10 @@ class AvatarPalette extends HTMLElement {
 
   private render(): void {
     const items = JSON.parse(this.getAttribute('items') || '[]');
-    this.path = this.getAttribute('path') as keyof Avatar;
+    this.partName = this.getAttribute('partName') as keyof Avatar;
     const paletteMode = this.getAttribute('paletteMode') === 'color' ? 'color' : 'type';
 
-    if (!items?.length || !paletteMode || (paletteMode === 'type' && !this.path)) {
+    if (!items?.length || !paletteMode || (paletteMode === 'type' && !this.partName)) {
       return;
     }
 
@@ -144,7 +144,7 @@ class AvatarPalette extends HTMLElement {
 
     const svgElement = document.createElement('svg-renderer');
 
-    svgElement.setAttribute('path', `avatar/${this.path}/${type}.svg`);
+    svgElement.setAttribute('path', `avatar/${this.partName}/${type}.svg`);
     svgElement.setAttribute('stretch', 'true');
 
     squareElement.appendChild(svgElement);
