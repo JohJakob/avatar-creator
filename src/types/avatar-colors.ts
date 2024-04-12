@@ -25,8 +25,12 @@ export enum MouthColor {
 }
 
 export enum ClothesColor {
-  Red = 'clothes-red',
   Blue = 'clothes-blue',
+  Green = 'clothes-green',
+  Red = 'clothes-red',
+  Purple = 'clothes-purple',
+  Yellow = 'clothes-yellow',
+  Pink = 'clothes-pink',
   Black = 'clothes-black',
   White = 'clothes-white',
 }
